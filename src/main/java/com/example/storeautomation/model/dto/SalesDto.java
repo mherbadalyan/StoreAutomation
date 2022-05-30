@@ -1,12 +1,11 @@
 package com.example.storeautomation.model.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 import java.sql.Date;
 @Data
-@AllArgsConstructor
+
 @Builder
 public class SalesDto {
 

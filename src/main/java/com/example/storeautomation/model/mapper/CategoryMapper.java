@@ -6,11 +6,15 @@ import com.example.storeautomation.model.entity.Category;
 public class CategoryMapper implements BaseMapper<Category, CategoryDto>{
     @Override
     public Category convertToEntity(CategoryDto dto) {
-        return null;
+        Category category=new Category();
+        category.setId(dto.getId());
+        category.setCategoryName(dto.getCategoryName());
+        return category;
     }
 
     @Override
     public CategoryDto convertToDto(Category entity) {
-        return null;
+        return CategoryDto.builder().id(entity.getId()).
+                categoryName(entity.getCategoryName()).build();
     }
 }
