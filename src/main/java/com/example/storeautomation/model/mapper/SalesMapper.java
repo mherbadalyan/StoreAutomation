@@ -6,6 +6,7 @@ import com.example.storeautomation.model.entity.Sales;
 public class SalesMapper implements BaseMapper<Sales, SalesDto>{
     @Override
     public Sales convertToEntity(SalesDto dto) {
+        Sales sales = new Sales();
         return null;
     }
 

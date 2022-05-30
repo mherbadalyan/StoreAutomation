@@ -18,6 +18,8 @@ public class ProductInBranchDto {
 
     private Date date;
 
+    private Long priceToSale;
+
     private ProductDto productDto;
 
     private BranchDto branchDto;

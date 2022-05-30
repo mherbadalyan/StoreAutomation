@@ -25,6 +25,9 @@ public class ProductInBranch {
     @Column
     private Date date;
 
+    @Column
+    private Long priceToSale;
+
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
