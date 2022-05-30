@@ -2,7 +2,11 @@ package com.example.storeautomation.model.mapper;
 
 import com.example.storeautomation.model.dto.BranchDto;
 import com.example.storeautomation.model.entity.Branch;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class BranchMapper implements BaseMapper<Branch, BranchDto>{
     @Override
     public Branch convertToEntity(BranchDto dto) {

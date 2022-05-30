@@ -2,7 +2,11 @@ package com.example.storeautomation.model.mapper;
 
 import com.example.storeautomation.model.dto.CategoryDto;
 import com.example.storeautomation.model.entity.Category;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class CategoryMapper implements BaseMapper<Category, CategoryDto>{
     @Override
     public Category convertToEntity(CategoryDto dto) {

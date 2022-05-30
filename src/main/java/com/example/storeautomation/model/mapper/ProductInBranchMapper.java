@@ -2,6 +2,11 @@ package com.example.storeautomation.model.mapper;
 
 import com.example.storeautomation.model.dto.ProductInBranchDto;
 import com.example.storeautomation.model.entity.ProductInBranch;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
 
 public class ProductInBranchMapper implements BaseMapper<ProductInBranch, ProductInBranchDto>{
     private BranchMapper branchMapper;

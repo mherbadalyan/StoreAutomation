@@ -3,8 +3,10 @@ package com.example.storeautomation.model.mapper;
 import com.example.storeautomation.model.dto.SalesDto;
 import com.example.storeautomation.model.entity.Sales;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
+@Component
 public class SalesMapper implements BaseMapper<Sales, SalesDto>{
 
     private final BranchMapper branchMapper;
