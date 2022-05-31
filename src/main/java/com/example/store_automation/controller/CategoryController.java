@@ -7,6 +7,7 @@ import com.example.store_automation.response.EntityDeletingResponse;
 import com.example.store_automation.response.EntityLookupResponse;
 import com.example.store_automation.response.EntityUpdatingResponse;
 import com.example.store_automation.service.CategoryService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("store-automation/category")
+@SecurityRequirement(name = "store_automation")
 public class CategoryController {
     private final CategoryService categoryService;
 

@@ -52,7 +52,6 @@ public class AuthController {
     }
 
 
-    @PreAuthorize("hasRole('GENERAL')")
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto){
 
