@@ -12,11 +12,9 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class CategoryService {
-   private final CategoryRepository categoryRepository;
-    private  final CategoryMapper categoryMapper;
+    private CategoryRepository categoryRepository;
 
-
-
+    private final CategoryMapper categoryMapper;
 
     public Optional<CategoryDto> createCategory(CategoryDto categoryDto){
 
@@ -32,9 +30,6 @@ public class CategoryService {
                 this.categoryMapper.convertToDto(savedCategory)
         );
     }
-
-
-
 
     public Optional<CategoryDto> updateCategory(CategoryDto categoryDto, String categoryName){
 
@@ -54,16 +49,9 @@ public class CategoryService {
         return Optional.of(categoryMapper.convertToDto(savedCategory));
     }
 
-
-
-
-
-
-
     public void deleteCategory(String categoryName){
         categoryRepository.deleteByCategoryName(categoryName);
     }
-
 
     public Optional<CategoryDto> getCategory(String categoryName){
         Optional<Category> category = categoryRepository.findByCategoryName(categoryName);

@@ -17,8 +17,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("store-automation/category")
 public class CategoryController {
-    private static final Logger logger = LoggerFactory.getLogger(CategoryController.class);
     private final CategoryService categoryService;
+
+    private static final Logger logger = LoggerFactory.getLogger(CategoryController.class);
 
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
