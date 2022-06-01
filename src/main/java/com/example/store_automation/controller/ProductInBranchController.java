@@ -1,9 +1,11 @@
 package com.example.store_automation.controller;
 
 import com.example.store_automation.model.dto.ProductInBranchDto;
+import com.example.store_automation.model.dto.SalesDto;
 import com.example.store_automation.model.entity.Branch;
 import com.example.store_automation.model.entity.Product;
 import com.example.store_automation.model.entity.ProductInBranch;
+import com.example.store_automation.model.entity.Sales;
 import com.example.store_automation.response.EntityCreatingResponse;
 import com.example.store_automation.response.EntityLookupResponse;
 import com.example.store_automation.response.EntityUpdatingResponse;
@@ -14,6 +16,7 @@ import com.example.store_automation.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -88,17 +91,27 @@ public class ProductInBranchController {
         return new EntityUpdatingResponse<ProductInBranchDto>().onSuccess(productInBranchDto.get());
     }
 
-//    @PutMapping("/{branchId}/{productInBranchId}/{quantity}")
-//    private ResponseEntity<?> sellingProduct(@PathVariable("quantity") Integer quantity,
-//                                             @PathVariable("branchId")Long branchId,
-//                                             @PathVariable("productInBranchId")Long productInBranchId) {
-//
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        Branch branch = (Branch) auth.getDetails();
-//        System.out.println(branch.getId());
-//
-//
-//        return null;
-//    }
+    @PutMapping("/{productInBranchId}/{quantity}")
+    private ResponseEntity<?> sellingProduct(@PathVariable("quantity") Integer quantity,
+                                             @PathVariable("productInBranchId")Long productInBranchId) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String branchName = auth.getName();
+
+        if (!productInBranchService.existById(productInBranchId)) {
+            logger.error("There is not product with given parameter");
+            return new EntityLookupResponse<Product>().onFailure("Product");
+        }
+
+        Optional<SalesDto> soledProduct = productInBranchService.sellingProduct(branchName,productInBranchId,quantity);
+
+        if (soledProduct.isEmpty()) {
+            logger.error("There is not product with this id in this branch or requested quantity of product.");
+            return new TransferResponse<SalesDto>().onFailureSelling();
+        }
+
+        logger.info("Product successfully sold");
+        return new TransferResponse<SalesDto>().onSuccessSelling(soledProduct.get());
+    }
 
 }

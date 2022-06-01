@@ -1,13 +1,17 @@
 package com.example.store_automation.service;
 
 import com.example.store_automation.model.dto.ProductInBranchDto;
+import com.example.store_automation.model.dto.SalesDto;
 import com.example.store_automation.model.entity.Branch;
 import com.example.store_automation.model.entity.Product;
 import com.example.store_automation.model.entity.ProductInBranch;
+import com.example.store_automation.model.entity.Sales;
 import com.example.store_automation.model.mapper.ProductInBranchMapper;
+import com.example.store_automation.model.mapper.SalesMapper;
 import com.example.store_automation.repository.BranchRepository;
 import com.example.store_automation.repository.ProductInBranchRepository;
 import com.example.store_automation.repository.ProductRepository;
+import com.example.store_automation.repository.SalesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +31,10 @@ public class ProductInBranchService {
     private final BranchRepository branchRepository;
 
     private final ProductInBranchMapper productInBranchMapper;
+
+    private final SalesRepository salesRepository;
+
+    private final SalesMapper salesMapper;
     public Optional<ProductInBranchDto> createProductInBranch(Long branchId,
                                                               Long productId,
                                                               Integer quantity,
@@ -84,5 +92,34 @@ public class ProductInBranchService {
 
     public boolean existById(Long productInBranchId) {
         return productInBranchRepository.existsById(productInBranchId);
+    }
+
+    public Optional<SalesDto> sellingProduct(String branchName, Long productInBranchId, Integer quantity) {
+
+        Optional<ProductInBranch> prInBrFromData = productInBranchRepository.findById(productInBranchId);
+        if (!prInBrFromData.get().getBranch().getName().equals(branchName) || prInBrFromData.get().getQuantity() < quantity) {
+            return Optional.empty();
+        }
+
+        int newQuantity = prInBrFromData.get().getQuantity() - quantity;
+
+        prInBrFromData.get().setQuantity(newQuantity);
+
+
+        Sales salesToSave = new Sales();
+        salesToSave.setBranch(prInBrFromData.get().getBranch());
+        salesToSave.setProduct(prInBrFromData.get().getProduct());
+        salesToSave.setQuantity(quantity);
+        salesToSave.setSalesDate(LocalDateTime.now());
+        salesToSave.setPrice(prInBrFromData.get().getProduct().getPriceToSale() * quantity);
+
+        Sales savedSales = salesRepository.save(salesToSave);
+
+
+        if (newQuantity == 0) {
+            productInBranchRepository.delete(prInBrFromData.get());
+        }
+
+        return Optional.of(salesMapper.convertToDto(savedSales));
     }
 }

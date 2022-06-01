@@ -1,5 +1,6 @@
 package com.example.store_automation.response;
 
+import com.example.store_automation.model.dto.SalesDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -27,5 +28,15 @@ public class TransferResponse<T> {
 
     public ResponseEntity<?> blockedCard() {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Selected card is not active.");
+    }
+
+    public ResponseEntity<?> onFailureSelling() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+                body("There is not product with this id in this branch or requested quantity of product.");
+    }
+
+    public ResponseEntity<?> onSuccessSelling(SalesDto salesDto) {
+        return ResponseEntity.status(HttpStatus.OK).
+                body(salesDto);
     }
 }

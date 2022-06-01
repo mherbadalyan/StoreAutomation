@@ -31,6 +31,13 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Transient
+    private Double priceToSale;
+
+    public Double getPriceToSale() {
+        return Math.ceil(price + (price * percent / 100));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
