@@ -22,7 +22,10 @@ public class Product {
     private String productName;
 
     @Column
-    private Long price;
+    private Double price;
+
+    @Column
+    private Double percent;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

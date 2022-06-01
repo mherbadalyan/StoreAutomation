@@ -7,13 +7,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-
 public class ProductInBranchMapper implements BaseMapper<ProductInBranch, ProductInBranchDto>{
-    private BranchMapper branchMapper;
-    private ProductMapper productMapper;
+    private final BranchMapper branchMapper;
+    private final ProductMapper productMapper;
     @Override
     public ProductInBranch convertToEntity(ProductInBranchDto dto) {
-        ProductInBranch productInBranch =new ProductInBranch();
+        ProductInBranch productInBranch = new ProductInBranch();
         productInBranch.setId(dto.getId());
         productInBranch.setQuantity(dto.getQuantity());
         productInBranch.setDate(dto.getDate());

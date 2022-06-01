@@ -14,7 +14,13 @@ public class ProductDto {
 
     private String productName;
 
-    private Long price;
+    private Double price;
+
+    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
+    private Double percent;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Double priceToSale;
 
     @JsonProperty(value = "category")
     private CategoryDto categoryDto;

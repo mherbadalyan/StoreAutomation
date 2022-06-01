@@ -13,8 +13,8 @@ public class TransferResponse<T> {
         return ResponseEntity.ok().body("Successfully money transfer.");
     }
 
-    public ResponseEntity<?> insufficientAmount() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Insufficient funds in the account.");
+    public ResponseEntity<?> insufficientQuantity() {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Insufficient products in the branch.");
     }
 
     public ResponseEntity<?> incorrectAccount() {

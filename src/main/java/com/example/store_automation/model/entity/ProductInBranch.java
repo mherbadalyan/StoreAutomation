@@ -5,6 +5,7 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -12,7 +13,9 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ProductInBranch {
 
     @Id
@@ -23,10 +26,8 @@ public class ProductInBranch {
     private Integer quantity;
 
     @Column
-    private Date date;
+    private LocalDateTime date;
 
-    @Column
-    private Long priceToSale;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

@@ -17,6 +17,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ProductService {
     private final ProductMapper productMapper;
+
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
@@ -58,5 +59,9 @@ public class ProductService {
 
     public void deleteProductById(Long id) {
         productRepository.deleteById(id);
+    }
+
+    public boolean existById(Long id) {
+        return productRepository.existsById(id);
     }
 }

@@ -16,6 +16,7 @@ public class ProductMapper implements BaseMapper<Product, ProductDto>{
         product.setId(dto.getId());
         product.setProductName(dto.getProductName());
         product.setPrice(dto.getPrice());
+        product.setPercent(dto.getPercent());
         product.setCategory(categoryMapper.convertToEntity(dto.getCategoryDto()));
         return product;
     }
@@ -26,6 +27,7 @@ public class ProductMapper implements BaseMapper<Product, ProductDto>{
                 id(entity.getId()).
                 productName(entity.getProductName()).
                 price(entity.getPrice()).
+                percent(entity.getPercent()).
                 categoryDto(categoryMapper.convertToDto(entity.getCategory())).
                 build();
     }
