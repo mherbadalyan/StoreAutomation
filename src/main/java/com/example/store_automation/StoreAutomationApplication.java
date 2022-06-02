@@ -2,6 +2,7 @@ package com.example.store_automation;
 
 import com.example.store_automation.model.entity.Role;
 import com.example.store_automation.repository.RoleRepository;
+import com.example.store_automation.service.ProductInBranchService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;

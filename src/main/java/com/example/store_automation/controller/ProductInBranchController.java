@@ -5,7 +5,6 @@ import com.example.store_automation.model.dto.SalesDto;
 import com.example.store_automation.model.entity.Branch;
 import com.example.store_automation.model.entity.Product;
 import com.example.store_automation.model.entity.ProductInBranch;
-import com.example.store_automation.model.entity.Sales;
 import com.example.store_automation.response.EntityCreatingResponse;
 import com.example.store_automation.response.EntityLookupResponse;
 import com.example.store_automation.response.EntityUpdatingResponse;
@@ -22,7 +21,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,11 +37,11 @@ public class ProductInBranchController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
-    @PostMapping("/{branchId}/{productId}/{quantity}/{price}")
-    private ResponseEntity<?> createProductInBranch(@PathVariable("branchId")Long branchId,
-                                                    @PathVariable("productId")Long productId,
+    @PostMapping("/{productId}/{quantity}/{price}/{expMonth}")
+    private ResponseEntity<?> createProductInBranch(@PathVariable("productId")Long productId,
                                                     @PathVariable("quantity") Integer quantity,
-                                                    @PathVariable("price") Double price) {
+                                                    @PathVariable("price") Double price,
+                                                    @PathVariable("expMonth")Integer expMonth) {
         logger.info("Received request to create productInBranch");
 
         if (!productService.existById(productId)) {
@@ -51,14 +49,10 @@ public class ProductInBranchController {
             return new EntityLookupResponse<Product>().onFailure("Product");
         }
 
-        if (!branchService.existById(branchId)) {
-            logger.error("There is not branch with given parameter");
-            return new EntityLookupResponse<Branch>().onFailure("Branch");
-        }
 
 
         Optional<ProductInBranchDto> optionalProductInBranchDto = productInBranchService.
-                createProductInBranch(branchId,productId,quantity,price);
+                createProductInBranch(productId,quantity,price,expMonth);
         if (optionalProductInBranchDto.isEmpty()) {
             logger.error("There is a productInBranch with given parameter");
             return new EntityCreatingResponse<ProductInBranch>().onFailure("ProductInBranch");

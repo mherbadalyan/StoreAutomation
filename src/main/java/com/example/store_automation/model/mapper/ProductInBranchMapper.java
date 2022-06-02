@@ -16,6 +16,8 @@ public class ProductInBranchMapper implements BaseMapper<ProductInBranch, Produc
         productInBranch.setId(dto.getId());
         productInBranch.setQuantity(dto.getQuantity());
         productInBranch.setDate(dto.getDate());
+        productInBranch.setExpDate(dto.getExpDate());
+        productInBranch.setPriceIn(dto.getPriceIn());
         productInBranch.setBranch(branchMapper.convertToEntity(dto.getBranchDto()));
         productInBranch.setProduct(productMapper.convertToEntity(dto.getProductDto()));
         return productInBranch;
@@ -26,6 +28,8 @@ public class ProductInBranchMapper implements BaseMapper<ProductInBranch, Produc
         return ProductInBranchDto.builder().id(entity.getId()).
                 quantity(entity.getQuantity()).
                 date(entity.getDate()).
+                expDate(entity.getExpDate()).
+                priceIn(entity.getPriceIn()).
                 branchDto(branchMapper.convertToDto(entity.getBranch())).
                 productDto(productMapper.convertToDto(entity.getProduct())).
                 build();

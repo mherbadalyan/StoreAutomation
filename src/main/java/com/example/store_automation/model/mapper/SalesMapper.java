@@ -19,6 +19,7 @@ public class SalesMapper implements BaseMapper<Sales, SalesDto>{
         sales.setPrice(dto.getPrice());
         sales.setSalesDate(dto.getSalesDate());
         sales.setQuantity(dto.getQuantity());
+        sales.setPriceIn(dto.getPriceIn());
         sales.setBranch(branchMapper.convertToEntity(dto.getBranchDto()));
         sales.setProduct(productMapper.convertToEntity(dto.getProductDto()));
         return sales;
@@ -31,6 +32,7 @@ public class SalesMapper implements BaseMapper<Sales, SalesDto>{
                 price(entity.getPrice()).
                 salesDate(entity.getSalesDate()).
                 quantity(entity.getQuantity()).
+                priceIn(entity.getPriceIn()).
                 branchDto(branchMapper.convertToDto(entity.getBranch())).
                 productDto(productMapper.convertToDto(entity.getProduct())).build();
     }

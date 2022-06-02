@@ -4,7 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -26,8 +26,12 @@ public class ProductInBranch {
     private Integer quantity;
 
     @Column
-    private LocalDateTime date;
+    private LocalDate date;
 
+    @Column
+    private LocalDate expDate;
+
+    private Double priceIn;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

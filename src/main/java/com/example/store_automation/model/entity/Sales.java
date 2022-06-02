@@ -29,6 +29,9 @@ public class Sales {
     @Column
     private Double price;
 
+    @Column
+    private Double priceIn;
+
     @ManyToOne
     @JoinColumn(name = "branch_id")
     private Branch branch;

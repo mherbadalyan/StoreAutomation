@@ -13,6 +13,8 @@ import com.example.store_automation.repository.ProductInBranchRepository;
 import com.example.store_automation.repository.ProductRepository;
 import com.example.store_automation.repository.SalesRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -36,14 +38,16 @@ public class ProductInBranchService {
     private final SalesRepository salesRepository;
 
     private final SalesMapper salesMapper;
-    public Optional<ProductInBranchDto> createProductInBranch(Long branchId,
-                                                              Long productId,
+    public Optional<ProductInBranchDto> createProductInBranch(Long productId,
                                                               Integer quantity,
-                                                              Double price) {
+                                                              Double price,
+                                                              Integer expMonth) {
 
         Optional<Product> optionalProduct = productRepository.findById(productId);
 
-        Optional<Branch> optionalBranch = branchRepository.findById(branchId);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        Optional<Branch> optionalBranch = branchRepository.findByName(auth.getName());
 
         if (optionalBranch.isEmpty() || optionalProduct.isEmpty()) {
             return Optional.empty();
@@ -54,11 +58,32 @@ public class ProductInBranchService {
         ProductInBranch productInBranchToSave = ProductInBranch.builder().
                 branch(optionalBranch.get()).
                 product(optionalProduct.get()).
-                date(LocalDateTime.now()).
+                date(LocalDate.now()).
+                priceIn(price).
+                expDate(dateToMonthYear(expMonth)).
                 quantity(quantity).build();
 
-        ProductInBranch savedProductInBranch = productInBranchRepository.save(productInBranchToSave);
+        Optional<ProductInBranch> uniqueProduct = productInBranchRepository.findUniqueProduct(
+                productInBranchToSave.getBranch().getId(),
+                productInBranchToSave.getProduct().getId(),
+                LocalDate.now(),
+                dateToMonthYear(expMonth),
+                price);
+
+        ProductInBranch savedProductInBranch;
+        if (uniqueProduct.isPresent()) {
+            int newQuantity = uniqueProduct.get().getQuantity() + quantity;
+            uniqueProduct.get().setQuantity(newQuantity);
+            savedProductInBranch = productInBranchRepository.save(uniqueProduct.get());
+        }else {
+         savedProductInBranch = productInBranchRepository.save(productInBranchToSave);
+        }
         return Optional.of(productInBranchMapper.convertToDto(savedProductInBranch));
+    }
+
+    private LocalDate dateToMonthYear(Integer expMonth) {
+        LocalDate dateNow = LocalDate.now();
+        return LocalDate.of(dateNow.getYear(),dateNow.getMonth(),1).plusMonths(expMonth);
     }
 
     public Optional<ProductInBranchDto> transferFromBranchToBranch(Long productInBranchId, Long branchId, Integer quantity) {
@@ -82,13 +107,27 @@ public class ProductInBranchService {
         ProductInBranch productInBranchToSave = ProductInBranch.builder().
                 branch(optionalBranch.get()).
                 product(product).
-                date(LocalDateTime.now()).
+                date(optionalProductInBranch.get().getDate()).
+                expDate(optionalProductInBranch.get().getExpDate()).
+                priceIn(optionalProductInBranch.get().getPriceIn()).
                 quantity(quantity).build();
 
-        ProductInBranch savedProductInBranch = productInBranchRepository.save(productInBranchToSave);
+        ProductInBranch savedProductInBranch;
+        Optional<ProductInBranch> uniqueProduct = productInBranchRepository.findUniqueProduct(branchId,
+                product.getId(),
+                productInBranchToSave.getDate(),
+                productInBranchToSave.getExpDate(),
+                productInBranchToSave.getPriceIn());
+
+        if (uniqueProduct.isPresent()) {
+            newQuantity = uniqueProduct.get().getQuantity() + quantity;
+            uniqueProduct.get().setQuantity(newQuantity);
+            savedProductInBranch = productInBranchRepository.save(uniqueProduct.get());
+        }else {
+            savedProductInBranch = productInBranchRepository.save(productInBranchToSave);
+        }
 
         return Optional.of(productInBranchMapper.convertToDto(savedProductInBranch));
-
     }
 
     public boolean existById(Long productInBranchId) {
@@ -113,6 +152,7 @@ public class ProductInBranchService {
         salesToSave.setQuantity(quantity);
         salesToSave.setSalesDate(LocalDateTime.now());
         salesToSave.setPrice(prInBrFromData.get().getProduct().getPriceToSale() * quantity);
+        salesToSave.setPriceIn(prInBrFromData.get().getPriceIn());
 
         Sales savedSales = salesRepository.save(salesToSave);
 

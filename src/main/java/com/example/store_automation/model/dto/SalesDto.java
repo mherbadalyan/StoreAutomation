@@ -19,6 +19,8 @@ public class SalesDto {
 
     private Double price;
 
+    private Double priceIn;
+
     private BranchDto branchDto;
 
     private ProductDto productDto;

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -19,7 +19,11 @@ public class ProductInBranchDto {
     private Integer quantity;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDateTime date;
+    private LocalDate date;
+
+    private LocalDate expDate;
+
+    private Double priceIn;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private ProductDto productDto;
