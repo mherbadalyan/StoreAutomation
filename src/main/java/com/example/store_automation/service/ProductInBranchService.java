@@ -38,6 +38,7 @@ public class ProductInBranchService {
     private final SalesRepository salesRepository;
 
     private final SalesMapper salesMapper;
+
     public Optional<ProductInBranchDto> createProductInBranch(Long productId,
                                                               Integer quantity,
                                                               Double price,
@@ -153,13 +154,10 @@ public class ProductInBranchService {
         salesToSave.setSalesDate(LocalDateTime.now());
         salesToSave.setPrice(prInBrFromData.get().getProduct().getPriceToSale() * quantity);
         salesToSave.setPriceIn(prInBrFromData.get().getPriceIn());
+        salesToSave.setExpDate(prInBrFromData.get().getExpDate());
+        salesToSave.setDateIn(prInBrFromData.get().getDate());
 
         Sales savedSales = salesRepository.save(salesToSave);
-
-
-        if (newQuantity == 0) {
-            productInBranchRepository.delete(prInBrFromData.get());
-        }
 
         return Optional.of(salesMapper.convertToDto(savedSales));
     }

@@ -35,7 +35,7 @@ public class ProductInBranchController {
 
     private final BranchService branchService;
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductInBranchController.class);
 
     @PostMapping("/{productId}/{quantity}/{price}/{expMonth}")
     private ResponseEntity<?> createProductInBranch(@PathVariable("productId")Long productId,

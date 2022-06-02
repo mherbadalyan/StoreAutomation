@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -20,6 +21,10 @@ public class SalesDto {
     private Double price;
 
     private Double priceIn;
+
+    private LocalDate expDate;
+
+    private LocalDate dateIn;
 
     private BranchDto branchDto;
 

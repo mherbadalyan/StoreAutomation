@@ -5,6 +5,7 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -31,6 +32,12 @@ public class Sales {
 
     @Column
     private Double priceIn;
+
+    @Column
+    private LocalDate expDate;
+
+    @Column
+    private LocalDate dateIn;
 
     @ManyToOne
     @JoinColumn(name = "branch_id")

@@ -1,7 +1,61 @@
 package com.example.store_automation.service;
 
+import com.example.store_automation.model.dto.ProductInBranchDto;
+import com.example.store_automation.model.dto.SalesDto;
+import com.example.store_automation.model.entity.ProductInBranch;
+import com.example.store_automation.model.entity.Sales;
+import com.example.store_automation.model.mapper.ProductInBranchMapper;
+import com.example.store_automation.repository.ProductInBranchRepository;
+import com.example.store_automation.repository.SalesRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
+@AllArgsConstructor
 public class SalesService {
+
+    private final SalesRepository salesRepository;
+
+    private final ProductInBranchRepository productInBranchRepository;
+
+    private final ProductInBranchMapper productInBranchMapper;
+    public boolean existById(Long id) {
+        return salesRepository.existsById(id);
+    }
+
+    public Optional<ProductInBranchDto> returnProduct(Long id, String branchName, Integer quantity) {
+
+        Optional<Sales> opSaleFromData = salesRepository.findById(id);
+
+        if (!opSaleFromData.get().getBranch().getName().equals(branchName) ||
+            opSaleFromData.get().getQuantity() < quantity) {
+            return Optional.empty();
+        }
+
+        int newQuantity = opSaleFromData.get().getQuantity() - quantity;
+
+        Optional<ProductInBranch> uniqueProduct = productInBranchRepository.findUniqueProduct(opSaleFromData.get().getBranch().getId(),
+                opSaleFromData.get().getProduct().getId(),
+                opSaleFromData.get().getDateIn(),
+                opSaleFromData.get().getExpDate(), opSaleFromData.get().getPriceIn());
+
+        if (uniqueProduct.isEmpty()) {
+            return Optional.empty();
+        }
+
+        if (newQuantity == 0) {
+            salesRepository.delete(opSaleFromData.get());
+        }else {
+            opSaleFromData.get().setQuantity(newQuantity);
+        }
+
+        newQuantity = uniqueProduct.get().getQuantity() + quantity;
+
+        uniqueProduct.get().setQuantity(newQuantity);
+
+        ProductInBranch savedPrInBr = productInBranchRepository.save(uniqueProduct.get());
+        return Optional.of(productInBranchMapper.convertToDto(savedPrInBr));
+    }
 }
