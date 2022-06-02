@@ -64,4 +64,14 @@ public class ProductService {
     public boolean existById(Long id) {
         return productRepository.existsById(id);
     }
+
+    public Optional<ProductDto> updateProduct(Long id, Double price, Double percent) {
+
+        Optional<Product> opProductFromData = productRepository.findById(id);
+        opProductFromData.get().setPrice(price);
+        opProductFromData.get().setPercent(percent);
+
+        Product savedProduct = productRepository.save(opProductFromData.get());
+        return Optional.of(productMapper.convertToDto(savedProduct));
+    }
 }

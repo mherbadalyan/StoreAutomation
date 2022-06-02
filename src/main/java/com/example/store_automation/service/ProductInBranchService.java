@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -121,5 +122,19 @@ public class ProductInBranchService {
         }
 
         return Optional.of(salesMapper.convertToDto(savedSales));
+    }
+
+    public Optional<List<ProductInBranchDto>> getProductsById(Long id) {
+
+        Optional<List<ProductInBranch>> productsList = productInBranchRepository.findProductInBranchesByProductId(id);
+
+        if (productsList.isEmpty()) {
+            return Optional.empty();
+        }
+
+        List<ProductInBranchDto> productInBranchDtos = (List<ProductInBranchDto>) productInBranchMapper.
+                                                                                    convertToDtoColl(productsList.get());
+
+        return Optional.of(productInBranchDtos);
     }
 }

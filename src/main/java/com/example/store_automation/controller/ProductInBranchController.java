@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -94,6 +95,7 @@ public class ProductInBranchController {
     @PutMapping("/{productInBranchId}/{quantity}")
     private ResponseEntity<?> sellingProduct(@PathVariable("quantity") Integer quantity,
                                              @PathVariable("productInBranchId")Long productInBranchId) {
+        logger.info("Product sales request received");
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String branchName = auth.getName();
@@ -112,6 +114,23 @@ public class ProductInBranchController {
 
         logger.info("Product successfully sold");
         return new TransferResponse<SalesDto>().onSuccessSelling(soledProduct.get());
+    }
+
+    @GetMapping("/{id}")
+    private ResponseEntity<?> getProductsById(@PathVariable("id") Long id) {
+        logger.info("Received request to get products by id ");
+        if (!productService.existById(id)) {
+            return new EntityLookupResponse<Product>().onFailure("Product");
+        }
+
+        Optional<List<ProductInBranchDto>> productsList = productInBranchService.getProductsById(id);
+
+        if (productsList.isEmpty()) {
+            logger.error("There is not products with this id in branches.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is not products with this id in branches.");
+        }
+        logger.info("Product list with " + id + " id successfully found.");
+        return new EntityLookupResponse<List<ProductInBranchDto>>().onSuccess(productsList.get());
     }
 
 }

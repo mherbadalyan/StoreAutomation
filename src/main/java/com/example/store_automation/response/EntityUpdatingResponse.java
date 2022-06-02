@@ -8,7 +8,7 @@ public class EntityUpdatingResponse<T> {
 
     public ResponseEntity<?> onFailure(String entityName) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                body("There is not a/an " + entityName + " with this parameter.");
+                body("There is problem with updating " + entityName + " with this parameter.");
     }
 
     public ResponseEntity<?> onSuccess(T entityDto) {

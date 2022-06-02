@@ -28,7 +28,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createBank(@RequestBody CategoryDto categoryDto) {
+    public ResponseEntity<?> createCategory(@RequestBody CategoryDto categoryDto) {
         logger.info("Received a request to create an Category.");
         Optional<CategoryDto> optionalCategoryDto = categoryService.createCategory(categoryDto);
 
@@ -42,7 +42,7 @@ public class CategoryController {
 
 
     @GetMapping("/{name}")
-    public ResponseEntity<?> getBank(@PathVariable("name") String name) {
+    public ResponseEntity<?> getCategory(@PathVariable("name") String name) {
         logger.info("Received a request to get a Category.");
         Optional<CategoryDto> categoryDto = categoryService.getCategory(name);
 
@@ -54,7 +54,7 @@ public class CategoryController {
         return new EntityLookupResponse<CategoryDto>().onFailure("category");
     }
     @DeleteMapping("/{name}")
-    public ResponseEntity<?> deleteBank(@PathVariable("name") String name) {
+    public ResponseEntity<?> deleteCategory(@PathVariable("name") String name) {
         logger.info("Received a request to delete a Category.");
         Optional<CategoryDto> optionalCategoryDto = categoryService.getCategory(name);
 
@@ -74,7 +74,7 @@ public class CategoryController {
 
         if (optionalCategoryDto.isEmpty()) {
             logger.warn("There is not a Category with this name.");
-            return new EntityUpdatingResponse<Category>().onFailure("Category");
+            return new EntityLookupResponse<Category>().onFailure("Category");
         }
         logger.info("Category successfully updated.");
         return new EntityUpdatingResponse<CategoryDto>().onSuccess(optionalCategoryDto.get());
