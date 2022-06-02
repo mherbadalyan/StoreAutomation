@@ -14,7 +14,8 @@ public class BranchMapper implements BaseMapper<Branch, BranchDto>{
         branch.setId(dto.getId());
         branch.setName(dto.getName());
         branch.setAddress(dto.getAddress());
-;       return branch;
+        branch.setPassword(dto.getPassword());
+       return branch;
     }
 
     @Override

@@ -18,4 +18,6 @@ public class BranchDto {
 
     private String address;
 
+    private String  password;
+
 }

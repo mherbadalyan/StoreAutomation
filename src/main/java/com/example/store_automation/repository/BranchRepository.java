@@ -12,4 +12,5 @@ public interface BranchRepository extends JpaRepository<Branch,Long> {
     Optional<Branch> findByAddress(String address);
     Boolean existsByAddress(String address);
     Boolean existsByName(String name);
+    void deleteByName(String name);
 }
