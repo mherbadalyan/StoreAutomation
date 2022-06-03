@@ -35,6 +35,7 @@ public class SalesService {
         }
 
         int newQuantity = opSaleFromData.get().getQuantity() - quantity;
+        Double newPrice = (opSaleFromData.get().getPrice() / opSaleFromData.get().getQuantity() ) * newQuantity;
 
         Optional<ProductInBranch> uniqueProduct = productInBranchRepository.findUniqueProduct(opSaleFromData.get().getBranch().getId(),
                 opSaleFromData.get().getProduct().getId(),
@@ -49,6 +50,7 @@ public class SalesService {
             salesRepository.delete(opSaleFromData.get());
         }else {
             opSaleFromData.get().setQuantity(newQuantity);
+            opSaleFromData.get().setPrice(newPrice);
         }
 
         newQuantity = uniqueProduct.get().getQuantity() + quantity;
