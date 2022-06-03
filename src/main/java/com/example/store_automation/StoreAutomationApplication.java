@@ -2,7 +2,6 @@ package com.example.store_automation;
 
 import com.example.store_automation.model.entity.Role;
 import com.example.store_automation.repository.RoleRepository;
-import com.example.store_automation.service.ProductInBranchService;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -14,11 +13,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
+import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
+@EnableScheduling
+
 @SecurityScheme(name = "store_automation", scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 @OpenAPIDefinition(info=@Info(title="Store Automation"))
 public class StoreAutomationApplication implements CommandLineRunner {
+
+
 
 
     @Bean
@@ -49,4 +52,10 @@ public class StoreAutomationApplication implements CommandLineRunner {
         }
     }
 
+
+
+
 }
+
+
+
