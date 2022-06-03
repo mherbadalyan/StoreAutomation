@@ -31,6 +31,7 @@ public class ProductInBranch {
     @Column
     private LocalDate expDate;
 
+    @Column
     private Double priceIn;
 
     @ManyToOne
@@ -40,6 +41,9 @@ public class ProductInBranch {
     @ManyToOne
     @JoinColumn(name = "branch_id")
     private Branch branch;
+
+    @Column
+    private LocalDate zeroDate;
 
     @Override
     public boolean equals(Object o) {

@@ -98,10 +98,11 @@ public class ProductInBranchService {
         Product product = optionalProductInBranch.get().getProduct();
 
         if (newQuantity == 0) {
-            productInBranchRepository.delete(optionalProductInBranch.get());
-        }else {
-            optionalProductInBranch.get().setQuantity(newQuantity);
+            optionalProductInBranch.get().setZeroDate(LocalDate.now());
         }
+
+        optionalProductInBranch.get().setQuantity(newQuantity);
+
 
         Optional<Branch> optionalBranch = branchRepository.findById(branchId);
 
@@ -144,6 +145,9 @@ public class ProductInBranchService {
 
         int newQuantity = prInBrFromData.get().getQuantity() - quantity;
 
+        if (newQuantity == 0) {
+            prInBrFromData.get().setZeroDate(LocalDate.now());
+        }
         prInBrFromData.get().setQuantity(newQuantity);
 
 

@@ -7,6 +7,7 @@ import com.example.store_automation.model.entity.Sales;
 import com.example.store_automation.model.mapper.SalesMapper;
 import com.example.store_automation.response.EntityLookupResponse;
 import com.example.store_automation.response.TransferResponse;
+import com.example.store_automation.service.RemoveOldsSoldProductsService;
 import com.example.store_automation.service.SalesService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -14,10 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -29,6 +27,8 @@ public class SalesController {
     private final SalesService salesService;
 
     private final SalesMapper salesMapper;
+
+    private final RemoveOldsSoldProductsService removeOldsSoldProductsService;
 
     private static final Logger logger = LoggerFactory.getLogger(SalesController.class);
 
@@ -55,6 +55,10 @@ public class SalesController {
 
         logger.info("Returned product with productInBranch id " + returnedProduct.get().getId());
         return new TransferResponse<ProductInBranchDto>().onSuccessReturning(returnedProduct.get());
+    }
+    @DeleteMapping("deleteOldProducts")
+    private void deleteProducts() {
+        removeOldsSoldProductsService.removeOldProducts();
     }
 
 }
