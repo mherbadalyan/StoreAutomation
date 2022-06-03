@@ -24,16 +24,10 @@ public class RemoveOldsSoldProductsService {
 
     public void removeOldProducts(){
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String branchName = auth.getName();
-
-        Optional<Branch> opBranch = branchRepository.findByName(branchName);
-
         LocalDate date = LocalDate.now().minusDays(14);
 
         List<ProductInBranch> productsListToRemove = productInBranchRepository.
-                                                                getProductsListToRemove(
-                                                                        opBranch.get().getId(), date);
+                                                                getProductsListToRemove(date);
 
         productInBranchRepository.deleteAll(productsListToRemove);
     }

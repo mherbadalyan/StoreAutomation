@@ -27,9 +27,7 @@ public interface ProductInBranchRepository extends JpaRepository<ProductInBranch
                                                  @Param("priceIn")Double priceIn);
 
     @Query("SELECT pr FROM ProductInBranch pr " +
-            "WHERE pr.branch.id = :branchId " +
-            "and pr.quantity = 0 " +
+            "WHERE pr.quantity = 0 " +
             "and pr.zeroDate = :zeroDate")
-    List<ProductInBranch> getProductsListToRemove(@Param("branchId") Long branchId,
-                                                  @Param("zeroDate") LocalDate zeroDate);
+    List<ProductInBranch> getProductsListToRemove(@Param("zeroDate") LocalDate zeroDate);
 }
