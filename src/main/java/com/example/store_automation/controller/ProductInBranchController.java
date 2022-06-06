@@ -5,6 +5,7 @@ import com.example.store_automation.model.dto.SalesDto;
 import com.example.store_automation.model.entity.Branch;
 import com.example.store_automation.model.entity.Product;
 import com.example.store_automation.model.entity.ProductInBranch;
+import com.example.store_automation.model.entity.Sales;
 import com.example.store_automation.response.EntityCreatingResponse;
 import com.example.store_automation.response.EntityLookupResponse;
 import com.example.store_automation.response.EntityUpdatingResponse;
@@ -12,6 +13,7 @@ import com.example.store_automation.response.TransferResponse;
 import com.example.store_automation.service.BranchService;
 import com.example.store_automation.service.ProductInBranchService;
 import com.example.store_automation.service.ProductService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +41,7 @@ public class ProductInBranchController {
     private static final Logger logger = LoggerFactory.getLogger(ProductInBranchController.class);
 
     @PostMapping("/{productId}/{quantity}/{price}/{expMonth}")
+    @SecurityRequirement(name = "store_automation")
     private ResponseEntity<?> createProductInBranch(@PathVariable("productId")Long productId,
                                                     @PathVariable("quantity") Integer quantity,
                                                     @PathVariable("price") Double price,
@@ -62,6 +66,7 @@ public class ProductInBranchController {
     }
 
     @PutMapping("/{branchId}/{productInBranchId}/{quantity}")
+    @SecurityRequirement(name = "store_automation")
     private ResponseEntity<?> transferFromBranchToBranch(@PathVariable("quantity") Integer quantity,
                                                          @PathVariable("branchId")Long branchId,
                                                          @PathVariable("productInBranchId")Long productInBranchId) {
@@ -87,6 +92,7 @@ public class ProductInBranchController {
     }
 
     @PutMapping("/{productInBranchId}/{quantity}")
+    @SecurityRequirement(name = "store_automation")
     private ResponseEntity<?> sellingProduct(@PathVariable("quantity") Integer quantity,
                                              @PathVariable("productInBranchId")Long productInBranchId) {
         logger.info("Product sales request received");

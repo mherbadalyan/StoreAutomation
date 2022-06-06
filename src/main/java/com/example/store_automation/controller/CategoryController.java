@@ -7,10 +7,12 @@ import com.example.store_automation.response.EntityDeletingResponse;
 import com.example.store_automation.response.EntityLookupResponse;
 import com.example.store_automation.response.EntityUpdatingResponse;
 import com.example.store_automation.service.CategoryService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -27,6 +29,10 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+
+    @Operation(summary = "Greets a person",
+            description = "A friendly greeting is returned"
+    )
     @PostMapping
     public ResponseEntity<?> createCategory(@RequestBody CategoryDto categoryDto) {
         logger.info("Received a request to create an Category.");

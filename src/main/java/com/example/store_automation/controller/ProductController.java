@@ -4,6 +4,7 @@ import com.example.store_automation.model.dto.*;
 import com.example.store_automation.model.entity.*;
 import com.example.store_automation.response.*;
 import com.example.store_automation.service.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("store-automation/product")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "store_automation")
 public class ProductController {
 
     private final ProductService productService;

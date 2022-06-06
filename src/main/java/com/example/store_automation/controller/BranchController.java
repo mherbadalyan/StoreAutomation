@@ -6,6 +6,7 @@ import com.example.store_automation.response.EntityDeletingResponse;
 import com.example.store_automation.response.EntityLookupResponse;
 import com.example.store_automation.response.EntityUpdatingResponse;
 import com.example.store_automation.service.BranchService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +42,7 @@ public class BranchController {
         return new EntityLookupResponse<BranchDto>().onFailure("Branch");
     }
     @PutMapping("/{name}")
+    @SecurityRequirement(name = "store_automation")
     public ResponseEntity<?> updateBranch(@RequestBody BranchDto branchDto,
                                             @PathVariable("name") String name){
         logger.info("Received a request to get a Branch.");
@@ -55,6 +57,7 @@ public class BranchController {
     }
 
     @DeleteMapping("/{name}")
+    @SecurityRequirement(name = "store_automation")
     public ResponseEntity<?> deleteBranch(@PathVariable("name") String name) {
         logger.info("Received a request to delete a Branch.");
         Optional<BranchDto> optionalBranchDto = branchService.getBranch(name);

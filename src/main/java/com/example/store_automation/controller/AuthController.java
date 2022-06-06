@@ -6,6 +6,7 @@ import com.example.store_automation.model.entity.Branch;
 import com.example.store_automation.model.entity.Role;
 import com.example.store_automation.repository.BranchRepository;
 import com.example.store_automation.repository.RoleRepository;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,6 +52,7 @@ public class AuthController {
     }
 
 
+    @SecurityRequirement(name = "store_automation")
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto){
 
