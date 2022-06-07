@@ -91,10 +91,11 @@ public class ProductInBranchController {
         return new EntityUpdatingResponse<ProductInBranchDto>().onSuccess(productInBranchDto.get());
     }
 
-    @PutMapping("/{productInBranchId}/{quantity}")
+    @PutMapping("/{productInBranchId}/{quantity}/{salePercent}/")
     @SecurityRequirement(name = "store_automation")
     private ResponseEntity<?> sellingProduct(@PathVariable("quantity") Integer quantity,
-                                             @PathVariable("productInBranchId")Long productInBranchId) {
+                                             @PathVariable("productInBranchId")Long productInBranchId,
+                                             @PathVariable("salePercent")Integer salePercent) {
         logger.info("Product sales request received");
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -105,7 +106,8 @@ public class ProductInBranchController {
             return new EntityLookupResponse<Product>().onFailure("Product");
         }
 
-        Optional<SalesDto> soledProduct = productInBranchService.sellingProduct(branchName,productInBranchId,quantity);
+        Optional<SalesDto> soledProduct = productInBranchService.
+                sellingProduct(branchName,productInBranchId,quantity,salePercent);
 
         if (soledProduct.isEmpty()) {
             logger.error("There is not product with this id in this branch or requested quantity of product.");

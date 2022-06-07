@@ -5,8 +5,7 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 
@@ -37,7 +36,7 @@ public class Branch {
     @JoinTable(name = "branch_roles",
             joinColumns = @JoinColumn(name = "branch_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

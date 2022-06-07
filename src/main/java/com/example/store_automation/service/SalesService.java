@@ -10,6 +10,7 @@ import com.example.store_automation.repository.SalesRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -21,6 +22,9 @@ public class SalesService {
     private final ProductInBranchRepository productInBranchRepository;
 
     private final ProductInBranchMapper productInBranchMapper;
+
+    private final IncomeCalcService incomeCalcService;
+
     public boolean existById(Long id) {
         return salesRepository.existsById(id);
     }
@@ -37,6 +41,14 @@ public class SalesService {
         int newQuantity = opSaleFromData.get().getQuantity() - quantity;
         Double newPrice = (opSaleFromData.get().getPrice() / opSaleFromData.get().getQuantity() ) * newQuantity;
 
+        LocalDate saleDate = opSaleFromData.get().getSalesDate().toLocalDate();
+        if (!saleDate.equals(LocalDate.now())) {
+            Double incomeToReturn = (opSaleFromData.get().getPrice() - newPrice ) -
+                    quantity * opSaleFromData.get().getPriceIn();
+            incomeCalcService.changeIncomeInDateByBranchId(incomeToReturn,
+                                                            saleDate,
+                                                            opSaleFromData.get().getBranch().getId());
+        }
         Optional<ProductInBranch> uniqueProduct = productInBranchRepository.findUniqueProduct(opSaleFromData.get().getBranch().getId(),
                 opSaleFromData.get().getProduct().getId(),
                 opSaleFromData.get().getDateIn(),

@@ -1,5 +1,6 @@
 package com.example.store_automation.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties(value = {"productDto","branchDto"},allowGetters = true,allowSetters = true)
 public class ProductInBranchDto {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -25,9 +27,7 @@ public class ProductInBranchDto {
 
     private Double priceIn;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private ProductDto productDto;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private BranchDto branchDto;
 }

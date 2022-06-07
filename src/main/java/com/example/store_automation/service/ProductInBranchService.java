@@ -82,11 +82,6 @@ public class ProductInBranchService {
         return Optional.of(productInBranchMapper.convertToDto(savedProductInBranch));
     }
 
-    private LocalDate dateToMonthYear(Integer expMonth) {
-        LocalDate dateNow = LocalDate.now();
-        return LocalDate.of(dateNow.getYear(),dateNow.getMonth(),1).plusMonths(expMonth);
-    }
-
     public Optional<ProductInBranchDto> transferFromBranchToBranch(Long productInBranchId, Long branchId, Integer quantity) {
         Optional<ProductInBranch> optionalProductInBranch = productInBranchRepository.findById(productInBranchId);
 
@@ -132,11 +127,7 @@ public class ProductInBranchService {
         return Optional.of(productInBranchMapper.convertToDto(savedProductInBranch));
     }
 
-    public boolean existById(Long productInBranchId) {
-        return productInBranchRepository.existsById(productInBranchId);
-    }
-
-    public Optional<SalesDto> sellingProduct(String branchName, Long productInBranchId, Integer quantity) {
+    public Optional<SalesDto> sellingProduct(String branchName, Long productInBranchId, Integer quantity,Integer salePercent) {
 
         Optional<ProductInBranch> prInBrFromData = productInBranchRepository.findById(productInBranchId);
         if (!prInBrFromData.get().getBranch().getName().equals(branchName) || prInBrFromData.get().getQuantity() < quantity) {
@@ -150,13 +141,15 @@ public class ProductInBranchService {
         }
         prInBrFromData.get().setQuantity(newQuantity);
 
+        double priceToSale = prInBrFromData.get().getProduct().getPriceToSale() * quantity;
+        Double priceWithSalePercent = priceToSale - (priceToSale * salePercent /100);
 
         Sales salesToSave = new Sales();
         salesToSave.setBranch(prInBrFromData.get().getBranch());
         salesToSave.setProduct(prInBrFromData.get().getProduct());
         salesToSave.setQuantity(quantity);
         salesToSave.setSalesDate(LocalDateTime.now());
-        salesToSave.setPrice(prInBrFromData.get().getProduct().getPriceToSale() * quantity);
+        salesToSave.setPrice(priceWithSalePercent);
         salesToSave.setPriceIn(prInBrFromData.get().getPriceIn());
         salesToSave.setExpDate(prInBrFromData.get().getExpDate());
         salesToSave.setDateIn(prInBrFromData.get().getDate());
@@ -178,5 +171,14 @@ public class ProductInBranchService {
                                                                                     convertToDtoColl(productsList.get());
 
         return Optional.of(productInBranchDtos);
+    }
+
+    public boolean existById(Long productInBranchId) {
+        return productInBranchRepository.existsById(productInBranchId);
+    }
+
+    private LocalDate dateToMonthYear(Integer expMonth) {
+        LocalDate dateNow = LocalDate.now();
+        return LocalDate.of(dateNow.getYear(),dateNow.getMonth(),1).plusMonths(expMonth);
     }
 }

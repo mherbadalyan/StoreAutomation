@@ -1,8 +1,6 @@
 package com.example.store_automation.controller;
 
 import com.example.store_automation.model.dto.ProductInBranchDto;
-import com.example.store_automation.model.dto.SalesDto;
-import com.example.store_automation.model.entity.ProductInBranch;
 import com.example.store_automation.model.entity.Sales;
 import com.example.store_automation.model.mapper.SalesMapper;
 import com.example.store_automation.response.EntityLookupResponse;
