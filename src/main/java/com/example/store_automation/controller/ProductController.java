@@ -75,27 +75,6 @@ public class ProductController {
         return new EntityLookupResponse<List<ProductDto>>().onSuccess(productsByCategoryId.get());
     }
 
-    @DeleteMapping("/{id}")
-    private ResponseEntity<?> deleteProductByID(@PathVariable("id") Long id ) {
-        logger.info("Received a request to delete an product.");
-
-        Optional<List<ProductInBranchDto>> productsById = productInBranchService.getProductsById(id);
-        if (productsById.isPresent() && productsById.get().isEmpty() ) {
-            logger.error("There is product with " + id + " in some branches.Can't delete this product");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                    body("There is product with " + id + " in some branches.Can't delete this product");
-        }
-
-        Optional<ProductDto> productById = productService.getProductById(id);
-
-        if (productById.isPresent()) {
-            productService.deleteProductById(id);
-            return new EntityDeletingResponse<ProductDto>().onSuccess(productById.get(),"Product");
-        }
-        logger.warn("There is not product with given id");
-        return new EntityLookupResponse<ProductDto>().onFailure("Product");
-    }
-
     @PutMapping("/update/{id}/{price}/{percent}")
     private ResponseEntity<?> updateProduct(@PathVariable("id") Long id,
                                             @PathVariable("price") Double price,
@@ -115,5 +94,16 @@ public class ProductController {
         logger.info("Updated product with id = " + id);
         return new EntityUpdatingResponse<ProductDto>().onSuccess(productDto.get());
     }
+    @GetMapping
+    private ResponseEntity<?> getAllProducts (){
+        logger.info("Received request to get all products.");
+        Optional<List<ProductDto>> allProducts = productService.getAllProducts();
 
+        if (allProducts.isEmpty()) {
+            logger.info("There is not products.");
+            return ResponseEntity.status(HttpStatus.OK).body("There is not products.");
+        }
+        logger.info("Products found");
+        return new EntityLookupResponse<List<ProductDto>>().onSuccess(allProducts.get());
+    }
 }

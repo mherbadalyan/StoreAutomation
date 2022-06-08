@@ -76,4 +76,39 @@ public class ProductControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
     }
+    @Test
+    public void getProductTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/store-automation/product/{id}", "1")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8))
+                        .andExpect(MockMvcResultMatchers.status().isOk())
+                        .andDo(MockMvcResultHandlers.print());
+
+    }
+    @Test
+    public void getProductsTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/store-automation/product")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+    }
+    @Test
+    public void getProductsByCategoryIdTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/store-automation/product/byCategoryId/{id}", "1")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+    }
+    @Test
+    @Transactional
+    public void updateProductSuccessTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/store-automation/product/update/{id}/{price}/{percent}", 1,77000,50)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
 }

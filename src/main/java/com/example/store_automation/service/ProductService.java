@@ -57,10 +57,6 @@ public class ProductService {
         return Optional.of(productDtos);
     }
 
-    public void deleteProductById(Long id) {
-        productRepository.deleteById(id);
-    }
-
     public boolean existById(Long id) {
         return productRepository.existsById(id);
     }
@@ -73,5 +69,16 @@ public class ProductService {
 
         Product savedProduct = productRepository.save(opProductFromData.get());
         return Optional.of(productMapper.convertToDto(savedProduct));
+    }
+
+    public Optional<List<ProductDto>> getAllProducts() {
+
+        List<Product> allProducts = productRepository.findAll();
+
+        if (allProducts.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of((List<ProductDto>) productMapper.convertToDtoColl(allProducts));
     }
 }
