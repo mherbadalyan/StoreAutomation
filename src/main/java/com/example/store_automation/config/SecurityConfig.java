@@ -41,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT,"/store-automation/branch/{name}/**").hasAuthority("GENERAL")
                 .antMatchers(HttpMethod.PUT,"/store-automation/sales/{id}/{quantity}/**").hasAuthority("BRANCH")
                 .antMatchers(HttpMethod.DELETE,"/store-automation/branch/{name}/**").hasAuthority("GENERAL")
+                .antMatchers(HttpMethod.PUT,"/store-automation/sales/{id}/{quantity}/**").hasAuthority("BRANCH")
                 .antMatchers(HttpMethod.PUT,"/store-automation/productInBranch/{productInBranchId}/{quantity}/**").hasAuthority("BRANCH")
                 .antMatchers(HttpMethod.POST,"/store-automation/productInBranch/{branchId}/{productId}/{quantity}/{price}/**").hasAuthority("GENERAL")
                 .antMatchers(HttpMethod.POST,"/api/auth/signup/**","/swagger-ui/**").hasAuthority("GENERAL")

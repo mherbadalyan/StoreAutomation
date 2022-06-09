@@ -4,6 +4,7 @@ import com.example.store_automation.model.dto.*;
 import com.example.store_automation.model.entity.*;
 import com.example.store_automation.response.*;
 import com.example.store_automation.service.*;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -25,10 +26,11 @@ public class ProductController {
 
     private final CategoryService categoryService;
 
-    private final ProductInBranchService productInBranchService;
-
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
+    @Operation(summary = "Create product",
+            description = "Creating product"
+    )
     @PostMapping
     private ResponseEntity<?> createProduct(@RequestBody ProductDto productDto) {
         logger.info("Received request to create product");
@@ -36,7 +38,7 @@ public class ProductController {
                 productDto.getCategoryDto().getCategoryName());
 
         if (optionalCategoryDto.isEmpty()) {
-            logger.error("There is not category with given parameter");
+            logger.error("There is not product with given parameter");
             return new EntityLookupResponse<Category>().onFailure("Category");
         }
 
@@ -49,32 +51,41 @@ public class ProductController {
         return new EntityCreatingResponse<ProductDto>().onSuccess(optionalProductDto.get());
     }
 
+    @Operation(summary = "Get product",
+            description = "Getting product by id"
+    )
     @GetMapping("/{id}")
     private ResponseEntity<?> getProduct(@PathVariable("id") Long id) {
-        logger.info("Received request to get product by id");
+        logger.info("Received request to get product by id "+id);
         Optional<ProductDto> productDto = productService.getProductById(id);
 
         if (productDto.isEmpty()) {
-            logger.error("There is not product with given parameter");
+            logger.error("There is not product with given id "+id);
             return new EntityLookupResponse<ProductDto>().onFailure("Product");
         }
         logger.info("Product with given id found");
         return new EntityLookupResponse<ProductDto>().onSuccess(productDto.get());
     }
 
+    @Operation(summary = "Get product by category id",
+            description = "Getting product by category id"
+    )
     @GetMapping("/byCategoryId/{id}")
     private ResponseEntity<?> getProductsByCategoryId(@PathVariable("id") Long id) {
-        logger.info("Received request to get products by category id");
+        logger.info("Received request to get products by category id "+id);
         Optional<List<ProductDto>> productsByCategoryId = productService.getProductsByCategoryId(id);
 
         if (productsByCategoryId.isEmpty()) {
-            logger.error("There is not products with given parameter");
+            logger.error("There is not products with given category id "+id);
             return new EntityLookupResponse<ProductDto>().onFailure("Products");
         }
         logger.info("Products with given category id found");
         return new EntityLookupResponse<List<ProductDto>>().onSuccess(productsByCategoryId.get());
     }
 
+    @Operation(summary = "Update product",
+            description = "Update product"
+    )
     @PutMapping("/update/{id}/{price}/{percent}")
     private ResponseEntity<?> updateProduct(@PathVariable("id") Long id,
                                             @PathVariable("price") Double price,
@@ -82,18 +93,22 @@ public class ProductController {
         logger.info("Received request to update product by id = " + id);
 
         if (!productService.existById(id)) {
-            logger.error("There is not product with given parameter");
+            logger.error("There is not product with given id "+id);
             return new EntityLookupResponse<ProductDto>().onFailure("Product");
         }
         Optional<ProductDto> productDto = productService.updateProduct(id,price,percent);
 
         if (productDto.isEmpty()) {
-            logger.error("There is problem with updating product with given parameter");
+            logger.error("There is problem with updating product with given id "+id);
             return new EntityUpdatingResponse<ProductDto>().onFailure("Product");
         }
         logger.info("Updated product with id = " + id);
         return new EntityUpdatingResponse<ProductDto>().onSuccess(productDto.get());
     }
+
+    @Operation(summary = "Get all product",
+            description = "Getting all product"
+    )
     @GetMapping
     private ResponseEntity<?> getAllProducts (){
         logger.info("Received request to get all products.");

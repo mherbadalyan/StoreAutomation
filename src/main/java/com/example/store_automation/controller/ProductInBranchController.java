@@ -5,7 +5,6 @@ import com.example.store_automation.model.dto.SalesDto;
 import com.example.store_automation.model.entity.Branch;
 import com.example.store_automation.model.entity.Product;
 import com.example.store_automation.model.entity.ProductInBranch;
-import com.example.store_automation.model.entity.Sales;
 import com.example.store_automation.response.EntityCreatingResponse;
 import com.example.store_automation.response.EntityLookupResponse;
 import com.example.store_automation.response.EntityUpdatingResponse;
@@ -13,6 +12,7 @@ import com.example.store_automation.response.TransferResponse;
 import com.example.store_automation.service.BranchService;
 import com.example.store_automation.service.ProductInBranchService;
 import com.example.store_automation.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -23,7 +23,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +39,9 @@ public class ProductInBranchController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductInBranchController.class);
 
+    @Operation(summary = "Create product in branch",
+            description = "Creating product in branch"
+    )
     @PostMapping("/{productId}/{quantity}/{price}/{expMonth}")
     @SecurityRequirement(name = "store_automation")
     private ResponseEntity<?> createProductInBranch(@PathVariable("productId")Long productId,
@@ -65,6 +67,10 @@ public class ProductInBranchController {
         return new EntityCreatingResponse<ProductInBranchDto>().onSuccess(optionalProductInBranchDto.get());
     }
 
+
+    @Operation(summary = "Update product in branch",
+            description = "Update product in branch"
+    )
     @PutMapping("/{branchId}/{productInBranchId}/{quantity}")
     @SecurityRequirement(name = "store_automation")
     private ResponseEntity<?> transferFromBranchToBranch(@PathVariable("quantity") Integer quantity,
@@ -91,6 +97,9 @@ public class ProductInBranchController {
         return new EntityUpdatingResponse<ProductInBranchDto>().onSuccess(productInBranchDto.get());
     }
 
+    @Operation(summary = "Salle product",
+            description = "salling product"
+    )
     @PutMapping("/{productInBranchId}/{quantity}/{salePercent}/")
     @SecurityRequirement(name = "store_automation")
     private ResponseEntity<?> sellingProduct(@PathVariable("quantity") Integer quantity,
@@ -118,6 +127,9 @@ public class ProductInBranchController {
         return new TransferResponse<SalesDto>().onSuccessSelling(soledProduct.get());
     }
 
+    @Operation(summary = "Get product by id",
+            description = "Getting product by id"
+    )
     @GetMapping("/{id}")
     private ResponseEntity<?> getProductsById(@PathVariable("id") Long id) {
         logger.info("Received request to get products by id ");
