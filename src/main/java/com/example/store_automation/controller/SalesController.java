@@ -7,6 +7,8 @@ import com.example.store_automation.response.EntityLookupResponse;
 import com.example.store_automation.response.TransferResponse;
 import com.example.store_automation.service.RemoveOldsSoldProductsService;
 import com.example.store_automation.service.SalesService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,17 +26,17 @@ public class SalesController {
 
     private final SalesService salesService;
 
-    private final SalesMapper salesMapper;
-
-    private final RemoveOldsSoldProductsService removeOldsSoldProductsService;
-
     private static final Logger logger = LoggerFactory.getLogger(SalesController.class);
 
     @PutMapping("/{id}/{quantity}")
+    @Operation(summary = "Return product",
+            description = "Returning product"
+    )
+    @SecurityRequirement(name = "store_automation")
     private ResponseEntity<?> returnProduct(@PathVariable("id") Long id,
                                             @PathVariable("quantity") Integer quantity) {
 
-        logger.info("Received request to return product");
+        logger.info("Received request to return product with id " + id);
 
         if (!salesService.existById(id)) {
             logger.error("There is not sold product with id " + id);
@@ -54,9 +56,4 @@ public class SalesController {
         logger.info("Returned product with productInBranch id " + returnedProduct.get().getId());
         return new TransferResponse<ProductInBranchDto>().onSuccessReturning(returnedProduct.get());
     }
-    @DeleteMapping("deleteOldProducts")
-    private void deleteProducts() {
-        removeOldsSoldProductsService.removeOldProducts();
-    }
-
 }

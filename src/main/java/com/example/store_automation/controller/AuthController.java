@@ -6,6 +6,7 @@ import com.example.store_automation.model.entity.Branch;
 import com.example.store_automation.model.entity.Role;
 import com.example.store_automation.repository.BranchRepository;
 import com.example.store_automation.repository.RoleRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,9 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
+    @Operation(summary = "Sign in",
+            description = "Sign in"
+    )
     @PostMapping("/signin")
     public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -51,7 +54,9 @@ public class AuthController {
         return new ResponseEntity<>("Branch signed-in successfully!.", HttpStatus.OK);
     }
 
-
+    @Operation(summary = "Sign up",
+            description = "Sign up"
+    )
     @SecurityRequirement(name = "store_automation")
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto){
@@ -80,12 +85,10 @@ public class AuthController {
             roles = roleRepository.findByName("BRANCH").get();
         }
 
-
         branch.setRoles(Collections.singleton(roles));
 
         branchRepository.save(branch);
 
         return new ResponseEntity<>("Branch registered successfully", HttpStatus.OK);
-
     }
 }

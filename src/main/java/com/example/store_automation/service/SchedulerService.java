@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -19,15 +20,20 @@ import java.util.Date;
 @AllArgsConstructor
 public class SchedulerService {
     private final RemoveOldsSoldProductsService removeOldsSoldProductsService;
+
+    private final IncomeCalcService incomeCalcService;
     private static final Logger logger = LoggerFactory.getLogger(SchedulerService.class);
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     @Scheduled(cron = "0 01 00 * * *")
     public void deleteOldProductsWithZeroQuantity() throws InterruptedException {
     removeOldsSoldProductsService.removeOldProducts();
-    logger.info("cleared products with a date more than 14 days old  ",dateFormat.format(new Date()));
+    logger.info("Cleared old products with zero quantity at date " + LocalDate.now().minusDays(14));
+    }
 
-
-
+    @Scheduled(cron = "0 05 00 * * *")
+    public void calcDailyIncome() throws InterruptedException {
+        incomeCalcService.calcDailyIncome();
+        logger.info("Calculated incomes by branches in date " + LocalDate.now().minusDays(1));
     }
 }
 

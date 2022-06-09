@@ -72,4 +72,13 @@ public class CategoryControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
     }
+
+    @Test
+    public void deleteCategorySuccessTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/store-automation/category/{name}", "M")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
 }

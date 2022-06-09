@@ -18,7 +18,6 @@ public class CategoryService {
 
     public Optional<CategoryDto> createCategory(CategoryDto categoryDto){
 
-
         if (categoryRepository.existsCategoryByCategoryName(categoryDto.getCategoryName())) {
             return Optional.empty();
         }
@@ -60,5 +59,4 @@ public class CategoryService {
             return Optional.empty();
         }
         return Optional.of(categoryMapper.convertToDto(category.get()));    }
-
 }

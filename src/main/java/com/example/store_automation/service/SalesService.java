@@ -1,7 +1,6 @@
 package com.example.store_automation.service;
 
 import com.example.store_automation.model.dto.ProductInBranchDto;
-import com.example.store_automation.model.dto.SalesDto;
 import com.example.store_automation.model.entity.ProductInBranch;
 import com.example.store_automation.model.entity.Sales;
 import com.example.store_automation.model.mapper.ProductInBranchMapper;
@@ -49,7 +48,8 @@ public class SalesService {
                                                             saleDate,
                                                             opSaleFromData.get().getBranch().getId());
         }
-        Optional<ProductInBranch> uniqueProduct = productInBranchRepository.findUniqueProduct(opSaleFromData.get().getBranch().getId(),
+        Optional<ProductInBranch> uniqueProduct = productInBranchRepository.findUniqueProduct(
+                opSaleFromData.get().getBranch().getId(),
                 opSaleFromData.get().getProduct().getId(),
                 opSaleFromData.get().getDateIn(),
                 opSaleFromData.get().getExpDate(), opSaleFromData.get().getPriceIn());

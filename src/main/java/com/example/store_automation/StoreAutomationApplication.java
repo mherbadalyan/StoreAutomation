@@ -21,9 +21,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @OpenAPIDefinition(info=@Info(title="Store Automation"))
 public class StoreAutomationApplication implements CommandLineRunner {
 
-
-
-
     @Bean
     public ModelMapper modelMapper(){
         return new ModelMapper();
@@ -51,10 +48,6 @@ public class StoreAutomationApplication implements CommandLineRunner {
             roleRepository.save(branchRole);
         }
     }
-
-
-
-
 }
 
 

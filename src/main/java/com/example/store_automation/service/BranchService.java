@@ -18,14 +18,8 @@ import java.util.Optional;
 public class BranchService {
 
     private PasswordEncoder passwordEncoder;
-
     private final BranchRepository branchRepository;
     private final BranchMapper branchMapper;
-
-
-    public Optional<BranchDto> getBranchById(Long id) {
-        return Optional.of(branchMapper.convertToDto(branchRepository.findById(id).get()));
-    }
 
     public boolean existById(Long id) {
         return branchRepository.existsById(id);
@@ -38,7 +32,6 @@ public class BranchService {
             return Optional.empty();
         }
         return Optional.of(branchMapper.convertToDto(branch.get()));
-
     }
 
     public Optional<BranchDto> updateBranch(BranchDto branchDto,String branchName){
@@ -58,13 +51,9 @@ public class BranchService {
 
             Branch savedBranch = branchRepository.save(branchFromData.get());
             return Optional.of(branchMapper.convertToDto(savedBranch));
-
-
     }
 
     public void deleteBranch(String name){
         branchRepository.deleteByName(name);
     }
-
-
 }
