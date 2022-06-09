@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/incomeCalc")
+@RequestMapping("/store-automation/incomeCalc")
 @AllArgsConstructor
 public class IncomeCalcController {
 
@@ -58,7 +58,7 @@ public class IncomeCalcController {
         }
 
         logger.info("Income in branch with id " + branchId +
-                "between date " + startDate + " - " + endDate + " = " + opIncome.get());
+                 " between date " + startDate + " - " + endDate + " = " + String.valueOf(opIncome.get()));
         return ResponseEntity.status(HttpStatus.OK).body(opIncome.get());
     }
 }

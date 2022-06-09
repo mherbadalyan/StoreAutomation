@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/sales")
+@RequestMapping("/store-automation/sales")
 @AllArgsConstructor
 public class SalesController {
 
