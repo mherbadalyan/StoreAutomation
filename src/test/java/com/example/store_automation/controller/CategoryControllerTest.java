@@ -67,7 +67,7 @@ public class CategoryControllerTest {
     @Test
     public void getFailureTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/store-automation/category/{name}", "Bomb")
+                        .get("/store-automation/category/{name}", "ggg")
                         .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());

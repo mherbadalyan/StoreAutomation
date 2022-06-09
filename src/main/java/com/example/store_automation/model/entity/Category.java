@@ -28,6 +28,8 @@ public class Category {
     @ToString.Exclude
     List<Product> productList = new ArrayList<>();
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
