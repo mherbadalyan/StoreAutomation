@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 @Component
 public class LocaleResolver extends AcceptHeaderLocaleResolver {
 
-    private static final List<Locale> LOCALES = Arrays.asList(new Locale("en"), new Locale("deu"));
+    private static final List<Locale> LOCALES = Arrays.asList(new Locale("en"), new Locale("ru"));
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
