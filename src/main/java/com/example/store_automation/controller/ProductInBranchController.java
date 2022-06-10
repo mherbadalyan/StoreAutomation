@@ -68,8 +68,8 @@ public class ProductInBranchController {
     }
 
 
-    @Operation(summary = "Update product in branch",
-            description = "Update product in branch"
+    @Operation(summary = "Transfer product from branch to branch",
+            description = "Transfer product from branch to branch"
     )
     @PutMapping("/{branchId}/{productInBranchId}/{quantity}")
     @SecurityRequirement(name = "store_automation")
@@ -97,8 +97,8 @@ public class ProductInBranchController {
         return new EntityUpdatingResponse<ProductInBranchDto>().onSuccess(productInBranchDto.get());
     }
 
-    @Operation(summary = "Salle product",
-            description = "salling product"
+    @Operation(summary = "Sell product",
+            description = "Selling product"
     )
     @PutMapping("/{productInBranchId}/{quantity}/{salePercent}/")
     @SecurityRequirement(name = "store_automation")
@@ -127,8 +127,8 @@ public class ProductInBranchController {
         return new TransferResponse<SalesDto>().onSuccessSelling(soledProduct.get());
     }
 
-    @Operation(summary = "Get product by id",
-            description = "Getting product by id"
+    @Operation(summary = "Get products in branches by id",
+            description = "Getting products in branches by id"
     )
     @GetMapping("/{id}")
     private ResponseEntity<?> getProductsById(@PathVariable("id") Long id) {

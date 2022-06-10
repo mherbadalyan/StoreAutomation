@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ProductDto {
-
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
-
+    @JsonProperty(value = "product name")
     private String productName;
 
     private Double price;

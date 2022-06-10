@@ -14,4 +14,8 @@ public class EntityLookupResponse<T> {
     public ResponseEntity<?> onSuccess(T entityDto) {
         return ResponseEntity.ok().body(entityDto);
     }
+
+    public ResponseEntity<?> onFailureTest(String message) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+    }
 }

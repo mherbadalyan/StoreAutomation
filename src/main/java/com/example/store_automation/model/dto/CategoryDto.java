@@ -14,5 +14,13 @@ public class CategoryDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
+    @JsonProperty(value = "category name")
     private String categoryName;
+
+    @Override
+    public String toString() {
+        return "Category " +
+                "id = " + id +
+                ", category name = " + categoryName ;
+    }
 }
