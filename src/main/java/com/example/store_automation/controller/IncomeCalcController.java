@@ -1,5 +1,6 @@
 package com.example.store_automation.controller;
 
+import com.example.store_automation.internationalization.services.LocaleService;
 import com.example.store_automation.model.entity.Branch;
 import com.example.store_automation.response.EntityLookupResponse;
 import com.example.store_automation.service.BranchService;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -28,6 +30,8 @@ public class IncomeCalcController {
 
     private final BranchService branchService;
 
+    private final LocaleService localeService;
+
     @Operation(summary = "Get income by branch id and date",
             description = "Getting income by branch id and date"
     )
@@ -36,14 +40,17 @@ public class IncomeCalcController {
                                               @PathVariable("startDate")
                                               @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
                                               @PathVariable("endDate")
-                                              @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+                                              @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+                                              HttpServletRequest request) {
 
         logger.info("Received request to get income in branch with id " + branchId +
                 "between date " + startDate + " - " + endDate);
 
+        String message;
         if (!branchService.existById(branchId)) {
             logger.warn("There is not branch with id = " + branchId);
-            return new EntityLookupResponse<Branch>().onFailure("Branch");
+            message = localeService.getMessage("Branch_not_found", request);
+            return new EntityLookupResponse<Branch>().onFailure(message);
         }
 
         Optional<Double> opIncome = incomeCalcService.getIncomeByBranchAndDate(branchId,
@@ -52,8 +59,9 @@ public class IncomeCalcController {
 
         if (opIncome.isEmpty()) {
             logger.error("There is not income in selected period of date");
+            message = localeService.getMessage("Income_not_Found", request);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                    body("There is not income in selected period of date.");
+                    body(message);
         }
 
         logger.info("Income in branch with id " + branchId +

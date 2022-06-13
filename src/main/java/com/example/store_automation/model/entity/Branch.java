@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
-
 @Table(name = "branch", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"name"}),
         @UniqueConstraint(columnNames = {"address"})

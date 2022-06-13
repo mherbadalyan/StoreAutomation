@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table
 @Getter
 @Setter
 @ToString
@@ -27,8 +26,6 @@ public class Category {
     @OneToMany(mappedBy = "category")
     @ToString.Exclude
     List<Product> productList = new ArrayList<>();
-
-
 
     @Override
     public boolean equals(Object o) {

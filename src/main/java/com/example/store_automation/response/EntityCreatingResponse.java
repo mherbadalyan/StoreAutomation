@@ -5,9 +5,9 @@ import org.springframework.http.ResponseEntity;
 
 public class EntityCreatingResponse<T> {
 
-    public ResponseEntity<?> onFailure(String entityName) {
+    public ResponseEntity<?> onFailure(String message) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                body("There is a/an " + entityName + " with this parameter.");
+                body(message);
     }
 
     public ResponseEntity<?> onSuccess(T entityDto) {

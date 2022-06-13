@@ -7,33 +7,13 @@ import org.springframework.http.ResponseEntity;
 
 public class TransferResponse<T> {
 
-    public ResponseEntity<?> onFailure() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Transfer with given params does not exist.");
+    public ResponseEntity<?> insufficientQuantity(String message) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
     }
 
-    public ResponseEntity<?> onSuccess() {
-        return ResponseEntity.ok().body("Successfully money transfer.");
-    }
-
-    public ResponseEntity<?> insufficientQuantity() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Insufficient products in the branch.");
-    }
-
-    public ResponseEntity<?> incorrectAccount() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong account number in request.");
-    }
-
-    public ResponseEntity<?> incorrectCardNumber() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong card number in request.");
-    }
-
-    public ResponseEntity<?> blockedCard() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Selected card is not active.");
-    }
-
-    public ResponseEntity<?> onFailureSelling() {
+    public ResponseEntity<?> onFailureSelling(String message) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                body("There is not product with this id in this branch or requested quantity of product.");
+                body(message);
     }
 
     public ResponseEntity<?> onSuccessSelling(SalesDto salesDto) {
@@ -41,9 +21,9 @@ public class TransferResponse<T> {
                 body(salesDto);
     }
 
-    public ResponseEntity<?> onFailureReturning() {
+    public ResponseEntity<?> onFailureReturning(String message) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-                body("Can't return product with given parameter.");
+                body(message);
     }
 
     public ResponseEntity<?> onSuccessReturning(T dto) {
