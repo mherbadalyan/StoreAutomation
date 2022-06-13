@@ -31,9 +31,7 @@ public class BranchController {
 
     private final LocaleService localeService;
 
-//    public BranchController(BranchService branchService) {
-//        this.branchService = branchService;
-//    }
+
 
     @Operation(summary = "Get branch",
             description = "Getting branch by name"
@@ -43,14 +41,13 @@ public class BranchController {
         logger.info("Received a request to get a Branch by name " + name);
         Optional<BranchDto> branchDto = branchService.getBranch(name);
 
-        String branchInter = localeService.getMessage("Branch", request);
-
         if (branchDto.isPresent()) {
             logger.info("Branch with name " + name + " found");
             return new EntityLookupResponse<BranchDto>().onSuccess(branchDto.get());
         }
         logger.warn("There is not Branch with name " + name);
-        return new EntityLookupResponse<BranchDto>().onFailureTest(branchInter);
+        String message = localeService.getMessage("Branch_not_found", request);
+        return new EntityLookupResponse<BranchDto>().onFailure(message);
     }
 
     @Operation(summary = "Update branch",
@@ -59,23 +56,24 @@ public class BranchController {
     @PutMapping("/{name}")
     @SecurityRequirement(name = "store_automation")
     public ResponseEntity<?> updateBranch(@RequestBody BranchDto branchDto,
-                                          @PathVariable("name") String name) {
+                                          @PathVariable("name") String name,
+                                          HttpServletRequest request) {
         logger.info("Received a request to update a Branch by name " + name);
         Optional<BranchDto> optionalBranchDto = branchService.updateBranch(branchDto, name);
         if (optionalBranchDto.isEmpty()) {
-            logger.warn("There is not a Branch with this name.");
-            return new EntityUpdatingResponse<Branch>().onFailure("Branch");
+            logger.warn("There is not a Branch with name " + name);
+            String message = localeService.getMessage("Branch_not_found", request);
+            return new EntityLookupResponse<Branch>().onFailure(message);
         }
         logger.info("Branch successfully updated.");
         return new EntityUpdatingResponse<BranchDto>().onSuccess(optionalBranchDto.get());
-
     }
     @Operation(summary = "Delete branch",
             description = "Deleting branch by name"
     )
     @DeleteMapping("/{name}")
     @SecurityRequirement(name = "store_automation")
-    public ResponseEntity<?> deleteBranch(@PathVariable("name") String name) {
+    public ResponseEntity<?> deleteBranch(@PathVariable("name") String name, HttpServletRequest request) {
         logger.info("Received a request to delete a Branch wit name " + name);
         Optional<BranchDto> optionalBranchDto = branchService.getBranch(name);
 
@@ -85,8 +83,7 @@ public class BranchController {
                     .onSuccess(optionalBranchDto.get(), "Branch");
         }
         logger.warn("There is not branch with given name");
-        return new EntityLookupResponse<BranchDto>().onFailure("Branch");
+        String message = localeService.getMessage("Branch_not_found", request);
+        return new EntityLookupResponse<BranchDto>().onFailure(message);
     }
-
-
 }

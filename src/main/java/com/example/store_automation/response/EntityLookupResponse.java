@@ -7,15 +7,11 @@ import org.springframework.http.ResponseEntity;
 @RequiredArgsConstructor
 public class EntityLookupResponse<T> {
 
-    public ResponseEntity<?> onFailure(String entityName) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(entityName + " with given params does not exist.");
-    }
-
     public ResponseEntity<?> onSuccess(T entityDto) {
         return ResponseEntity.ok().body(entityDto);
     }
 
-    public ResponseEntity<?> onFailureTest(String message) {
+    public ResponseEntity<?> onFailure(String message) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
     }
 }

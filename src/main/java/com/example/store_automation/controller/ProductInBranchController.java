@@ -1,5 +1,6 @@
 package com.example.store_automation.controller;
 
+import com.example.store_automation.internationalization.services.LocaleService;
 import com.example.store_automation.model.dto.ProductInBranchDto;
 import com.example.store_automation.model.dto.SalesDto;
 import com.example.store_automation.model.entity.Branch;
@@ -23,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +39,8 @@ public class ProductInBranchController {
 
     private final BranchService branchService;
 
+    private final LocaleService localeService;
+
     private static final Logger logger = LoggerFactory.getLogger(ProductInBranchController.class);
 
     @Operation(summary = "Create product in branch",
@@ -47,15 +51,15 @@ public class ProductInBranchController {
     private ResponseEntity<?> createProductInBranch(@PathVariable("productId")Long productId,
                                                     @PathVariable("quantity") Integer quantity,
                                                     @PathVariable("price") Double price,
-                                                    @PathVariable("expMonth")Integer expMonth) {
+                                                    @PathVariable("expMonth")Integer expMonth,
+                                                    HttpServletRequest request) {
         logger.info("Received request to create productInBranch");
 
         if (!productService.existById(productId)) {
             logger.error("There is not product with given parameter");
-            return new EntityLookupResponse<Product>().onFailure("Product");
+            String message = localeService.getMessage("Product_not_found", request);
+            return new EntityLookupResponse<Product>().onFailure(message);
         }
-
-
 
         Optional<ProductInBranchDto> optionalProductInBranchDto = productInBranchService.
                 createProductInBranch(productId,quantity,price,expMonth);
@@ -75,15 +79,19 @@ public class ProductInBranchController {
     @SecurityRequirement(name = "store_automation")
     private ResponseEntity<?> transferFromBranchToBranch(@PathVariable("quantity") Integer quantity,
                                                          @PathVariable("branchId")Long branchId,
-                                                         @PathVariable("productInBranchId")Long productInBranchId) {
+                                                         @PathVariable("productInBranchId")Long productInBranchId,
+                                                         HttpServletRequest request) {
+        String message;
         if (!branchService.existById(branchId)) {
             logger.error("There is not branch with given parameter");
-            return new EntityLookupResponse<Branch>().onFailure("Branch");
+            message = localeService.getMessage("Branch_not_found", request);
+            return new EntityLookupResponse<Branch>().onFailure(message);
         }
 
         if (!productInBranchService.existById(productInBranchId)) {
             logger.error("There is not productInBranch with given parameter");
-            return new EntityLookupResponse<ProductInBranch>().onFailure("ProductInBranch");
+            message = localeService.getMessage("Product_not_found", request);
+            return new EntityLookupResponse<ProductInBranch>().onFailure(message);
         }
 
         Optional<ProductInBranchDto> productInBranchDto = productInBranchService.
@@ -91,7 +99,8 @@ public class ProductInBranchController {
                                                                 productInBranchId, branchId, quantity);
         if (productInBranchDto.isEmpty()) {
             logger.error("Insufficient products in the branch.");
-            return new TransferResponse<ProductInBranchDto>().insufficientQuantity();
+            message = localeService.getMessage("Insufficient_products", request);
+            return new TransferResponse<ProductInBranchDto>().insufficientQuantity(message);
         }
         logger.info("Product successfully transferred from branch to branch");
         return new EntityUpdatingResponse<ProductInBranchDto>().onSuccess(productInBranchDto.get());
@@ -104,23 +113,26 @@ public class ProductInBranchController {
     @SecurityRequirement(name = "store_automation")
     private ResponseEntity<?> sellingProduct(@PathVariable("quantity") Integer quantity,
                                              @PathVariable("productInBranchId")Long productInBranchId,
-                                             @PathVariable("salePercent")Integer salePercent) {
+                                             @PathVariable("salePercent")Integer salePercent,
+                                             HttpServletRequest request) {
         logger.info("Product sales request received");
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String branchName = auth.getName();
-
+        String message;
         if (!productInBranchService.existById(productInBranchId)) {
             logger.error("There is not product with given parameter");
-            return new EntityLookupResponse<Product>().onFailure("Product");
+            message = localeService.getMessage("Product_not_found", request);
+            return new EntityLookupResponse<Product>().onFailure(message);
         }
 
         Optional<SalesDto> soledProduct = productInBranchService.
                 sellingProduct(branchName,productInBranchId,quantity,salePercent);
 
         if (soledProduct.isEmpty()) {
-            logger.error("There is not product with this id in this branch or requested quantity of product.");
-            return new TransferResponse<SalesDto>().onFailureSelling();
+            logger.error("There is no product with this id in this branch or requested quantity of product.");
+            message = localeService.getMessage("Selling_failure", request);
+            return new TransferResponse<SalesDto>().onFailureSelling(message);
         }
 
         logger.info("Product successfully sold");
@@ -131,20 +143,23 @@ public class ProductInBranchController {
             description = "Getting products in branches by id"
     )
     @GetMapping("/{id}")
-    private ResponseEntity<?> getProductsById(@PathVariable("id") Long id) {
+    private ResponseEntity<?> getProductsById(@PathVariable("id") Long id,
+                                              HttpServletRequest request) {
         logger.info("Received request to get products by id ");
+        String message;
         if (!productService.existById(id)) {
-            return new EntityLookupResponse<Product>().onFailure("Product");
+            message = localeService.getMessage("Product_not_found", request);
+            return new EntityLookupResponse<Product>().onFailure(message);
         }
 
         Optional<List<ProductInBranchDto>> productsList = productInBranchService.getProductsById(id);
 
         if (productsList.isEmpty()) {
-            logger.error("There is not products with this id in branches.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There is not products with this id in branches.");
+            logger.error("There is no products with this id in branches.");
+            message = localeService.getMessage("No_products_in_branches", request);
+            return new EntityLookupResponse<Product>().onFailure(message);
         }
         logger.info("Product list with " + id + " id successfully found.");
         return new EntityLookupResponse<List<ProductInBranchDto>>().onSuccess(productsList.get());
     }
-
 }
