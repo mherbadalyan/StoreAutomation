@@ -10,7 +10,7 @@
 
 ## Description
 
-Store operations' automaton app along with the
+Store operation's automaton app along with the
 backoffice where user accounts (warehouses) are
 registered. The application tracks the goods
 received by the warehouses, calculates income,
