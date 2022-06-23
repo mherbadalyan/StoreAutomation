@@ -75,10 +75,11 @@ public class ProductInBranchController {
     @Operation(summary = "Transfer product from branch to branch",
             description = "Transfer product from branch to branch"
     )
-    @PutMapping("/{branchId}/{productInBranchId}/{quantity}")
+    @PutMapping("/{fromBranchId}/{toBranchId}/{productInBranchId}/{quantity}")
     @SecurityRequirement(name = "store_automation")
     private ResponseEntity<?> transferFromBranchToBranch(@PathVariable("quantity") Integer quantity,
-                                                         @PathVariable("branchId")Long branchId,
+                                                         @PathVariable("fromBranchId")Long branchId,
+                                                         @PathVariable("toBranchId")Long toBranchId,
                                                          @PathVariable("productInBranchId")Long productInBranchId,
                                                          HttpServletRequest request) {
         String message;

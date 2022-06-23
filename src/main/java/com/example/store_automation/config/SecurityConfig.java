@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+                http
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/**").permitAll()
@@ -37,7 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/store-automation/category/**").hasAuthority("GENERAL")
                 .antMatchers("/store-automation/incomeCalc/**").hasAuthority("GENERAL")
                 .antMatchers("/store-automation/product/**").hasAuthority("GENERAL")
-                .antMatchers(HttpMethod.PUT,"/store-automation/productInBranch/{branchId}/{productInBranchId}/{quantity}/**").hasAuthority("BRANCH")
+                .antMatchers(HttpMethod.PUT,"/store-automation/productInBranch/{fromBranchId}/{toBranchId}/{productInBranchId}/{quantity}/**").hasAuthority("GENERAL")
+                .antMatchers(HttpMethod.PUT,"/store-automation/productInBranch/{productInBranchId}/{quantity}/{salePercent}/**").hasAuthority("BRANCH")
                 .antMatchers(HttpMethod.PUT,"/store-automation/branch/{name}/**").hasAuthority("GENERAL")
                 .antMatchers(HttpMethod.PUT,"/store-automation/sales/{id}/{quantity}/**").hasAuthority("BRANCH")
                 .antMatchers(HttpMethod.DELETE,"/store-automation/branch/{name}/**").hasAuthority("GENERAL")

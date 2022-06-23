@@ -14,15 +14,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
 @SpringBootApplication
 @EnableScheduling
-
 @SecurityScheme(name = "store_automation", scheme = "basic", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
-@OpenAPIDefinition(info=@Info(title="Store Automation"))
+@OpenAPIDefinition(info = @Info(title = "Store Automation"))
 public class StoreAutomationApplication implements CommandLineRunner {
 
     @Bean
-    public ModelMapper modelMapper(){
+    public ModelMapper modelMapper() {
         return new ModelMapper();
     }
 
@@ -36,13 +36,13 @@ public class StoreAutomationApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        if(roleRepository.findByName("GENERAL").isEmpty()){
+        if (roleRepository.findByName("GENERAL").isEmpty()) {
             Role generalRole = new Role();
             generalRole.setName("GENERAL");
             roleRepository.save(generalRole);
         }
 
-        if(roleRepository.findByName("BRANCH").isEmpty()) {
+        if (roleRepository.findByName("BRANCH").isEmpty()) {
             Role branchRole = new Role();
             branchRole.setName("BRANCH");
             roleRepository.save(branchRole);
